@@ -1,0 +1,58 @@
+body {
+	margin: 40px ;
+}
+
+/* Wrapper div for the Grid Layout */
+.wrapper {
+	width:220px;
+	margin: 0 auto;
+	/* Must use 'grid' for Grid Layout */
+	display: grid;
+	/* 4 columns - 50px each */
+	grid-template-columns: 50px 50px 50px 50px;
+	/* 3 rows - title smaller than the rest.. */
+	grid-template-rows: 40px 50px 50px ;
+	/* Gap between rows and columns */
+	grid-gap: 5px;
+	background-color: #fff;
+	color: #444;
+}
+
+
+/* Calculator 'screen' */
+.titleBox {
+	/* The screen spans from line 1 to 5 */
+	grid-column-start:1;
+	grid-column-end:5;
+	background-color: lightgreen;
+	color: #fff;
+	border-radius: 5px;
+	font-size: 170%;
+	text-align:right;
+	padding:5px;
+}
+
+
+/* DIV elements 1, 2, 3...+, - ... */
+.key {
+	background-color: #EEE;
+	color: black;
+	border-radius: 5px;
+	font-size: 120%;
+}
+/* Change to darker shade on hover */
+.key:hover{
+	background-color: #DDD;
+}
+
+
+/* <a> elements inside the DIVs */
+.button{
+	/* 'block' to get <a> element to fill div */
+	display:block;
+	margin:0;
+	text-align:center;
+	color:black;
+	text-decoration: none;	
+	padding:14px 0 14px;
+}
