@@ -2,6 +2,7 @@
 
 window.onload = function onload() {
   var butttons = document.getElementsByClassName('button');
+  var titleBox = document.getElementsByClassName('titleBox')[0];
   var display = '0';
   var temp = '0';
   var operatorClick = { flag: false, value: '' };
@@ -55,10 +56,15 @@ window.onload = function onload() {
   };
 
   var numberClick = function numberClick(num) {
-    display = display + num;
+    display = titleBox.innerHTML;
+
+    if (!(display.indexOf('.') > -1 && num === '.')) { // if the button clicked is the decimal point "." and the number in the display already has a decimal point, ignore
+      display = display === '0' && num !== '.' ? num : display + num;
+      titleBox.innerHTML = display;
+    }
   };
 
-  // converts variable buttons to a proper JavaScript array, so that array methods are available for it
+  // converts "buttons" to a proper JavaScript array, so that array methods are available for it
   butttons = [].slice.call(butttons, 0);
 
   butttons.map(function (el) {
