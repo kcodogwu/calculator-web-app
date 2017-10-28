@@ -3,9 +3,15 @@
 window.onload = function onload() {
   var butttons = document.getElementsByClassName('button');
   var titleBox = document.getElementsByClassName('titleBox')[0];
-  var display = '0';
-  var temp = '0';
+  var temp = 0;
+  var result = 0;
   var operatorClick = { flag: false, value: '' };
+
+  var reset = function reset() {
+    temp = 0;
+    operatorClick.flag = false;
+    operatorClick.value = '';
+  };
 
   var addEvent = function addEvent(element, eventType, eventHandler) {
     if (element.attachEvent)
@@ -19,7 +25,7 @@ window.onload = function onload() {
     e.preventDefault;
     var val = e.target.innerHTML;
 
-    if (val === '=' || val === '+' || val === '-' || val === '×' || val === '÷')
+    if (val === '=' || val === '+' || val === '-' || val === decodeURI('%C3%97') || val === decodeURI('%C3%B7')) // %C3%97 is the multiplication sign encodedURI and %C3%B7 is the division sign encodedURI
       operation(val)
     ; else 
       numberClick(val)
@@ -27,40 +33,32 @@ window.onload = function onload() {
   };
 
   var operation = function operation(operator) {
-    operatorClick.flag = true;
-    operatorClick.value = operator;
-    
-    switch (operator) {
-    
-    case '=':
-      return function () {};
-  
-    case '+':
-      return function () {};
-  
-    case '-':
-      return function () {};
-  
-    case '×':
-      return function () {};
-  
-    case '÷':
-      return function () {};
-  
-    default:
-      return function () {
-        return 'error';
-      };
-    
+    if (operatorClick.flag) {
+      if (operatorClick.value === '+') {
+        result = temp + Number(titleBox.innerHTML);
+      } else if (operatorClick.value === '-') {
+        result = temp - Number(titleBox.innerHTML);
+      } else if (operatorClick.value === decodeURI('%C3%97')) {
+        result = temp * Number(titleBox.innerHTML);
+      } else if (operatorClick.value === decodeURI('%C3%B7')) {
+        result = temp / Number(titleBox.innerHTML);
+      }
+    }
+
+    if (operator === '=') {
+      titleBox.innerHTML = result;
+      reset();
+    } else {
+      temp = Number(titleBox.innerHTML);
+      titleBox.innerHTML = result;
+      operatorClick.flag = true;
+      operatorClick.value = operator;
     }
   };
 
   var numberClick = function numberClick(num) {
-    display = titleBox.innerHTML;
-
-    if (!(display.indexOf('.') > -1 && num === '.')) { // if the button clicked is the decimal point "." and the number in the display already has a decimal point, ignore
-      display = display === '0' && num !== '.' ? num : display + num;
-      titleBox.innerHTML = display;
+    if (!(titleBox.innerHTML.indexOf('.') > -1 && num === '.')) { // if the button clicked is the decimal point "." and the number in the display already has a decimal point, ignore
+      titleBox.innerHTML = titleBox.innerHTML === '0' && num !== '.' ? num : titleBox.innerHTML + num;
     }
   };
 
