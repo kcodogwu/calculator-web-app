@@ -3,16 +3,29 @@
 window.onload = function onload() {
   var butttons = document.getElementsByClassName('button');
   var titleBox = document.getElementsByClassName('titleBox')[0];
-  var acButton = document.getElementsByClassName('ac')[0];
-  var left = 0;
-  var right = 0;
-  var operatorClick = { flag: false, value: '' };
+  var clearButton = document.getElementsByClassName('clear')[0];
+  var oldOp = '';
+  var mem = 0;
+  var flag = false;
 
-  var reset = function reset(x) {
-    left = x;
-    right = 0;
-    operatorClick.flag = false;
-    operatorClick.value = '';
+  var hasClass = function hasClass(el, className) {
+    return el.classList ? el.classList.contains(className) : new RegExp('\\b'+ className+'\\b').test(el.className);
+  };
+
+  var addClass = function addClass(el, className) {
+    if (el.classList) 
+      el.classList.add(className)
+    ; else if (!hasClass(el, className)) 
+      el.className += ' ' + className
+    ;
+  };
+
+  var removeClass = function removeClass(el, className) {
+    if (el.classList) 
+      el.classList.remove(className)
+    ; else 
+      el.className = el.className.replace(new RegExp('\\b'+ className+'\\b', 'g'), '')
+    ;
   };
 
   var addEvent = function addEvent(element, eventType, eventHandler) {
@@ -23,55 +36,56 @@ window.onload = function onload() {
     ;
   };
 
-  var operation = function operation(operator) {
-    right = Number(titleBox.innerHTML);
+  var callback = function callback(e) {
+    var val = e.target.innerHTML;
 
-    if (operatorClick.flag) {
-      if (operatorClick.value === '+') {
-        left = left + right;
-      } else if (operatorClick.value === '-') {
-        left = left - right;
-      } else if (operatorClick.value === decodeURI('%C3%97')) {
-        left = left * right;
-      } else if (operatorClick.value === decodeURI('%C3%B7')) {
-        left = left / right;
-      }
-    }
+    butttons.map(function (el) {
+      removeClass(el, 'clicked');
+    });
 
-    if (operator === '=') {
-      titleBox.innerHTML = left;
-      reset(left);
-    } else if (operator === 'AC') {
-      reset(0);
-      titleBox.innerHTML = '0';
-    } else if (operator === 'C') {
-      right = 0;
-      titleBox.innerHTML = '0';
-      acButton.firstChild.innerHTML = 'AC';
+    if (val === 'Clear' || val === '=' || val === '+' || val === '-' || val === decodeURI('%C3%97') || val === decodeURI('%C3%B7')) { // %C3%97 is the multiplication sign encodedURI and %C3%B7 is the division sign encodedURI
+      if (val !== 'Clear' && val !== '=') addClass(e.target, 'clicked');
+      operation(val);
+      flag = true;
     } else {
-      titleBox.innerHTML = left;
-      left = left === 0 ? right : left;
-      right = 0;
-      operatorClick.flag = true;
-      operatorClick.value = operator;
+      numberClick(val);
+      flag = false;
     }
   };
 
-  var callback = function callback(e) {
-    e.preventDefault;
-    var val = e.target.innerHTML;
+  var operation = function operation(operator) {
+    if (operator === 'Clear') {
+      mem = 0;
+      oldOp = '';
+      titleBox.innerHTML = '0';
+      flag = false;
+    } else if (oldOp === '' ) {
+      mem = Number(titleBox.innerHTML);
+      oldOp = operator;
+    } else {
+      if (oldOp === '+') {
+        mem = mem + Number(titleBox.innerHTML);
+      } else if (oldOp === '-') {
+        mem = mem - Number(titleBox.innerHTML);
+      } else if (oldOp === decodeURI('%C3%97')) {
+        mem = mem * Number(titleBox.innerHTML);
+      } else if (oldOp === decodeURI('%C3%B7')) {
+        mem = mem / Number(titleBox.innerHTML);
+      }
 
-    if (val === 'C' || val === 'AC' || val === '=' || val === '+' || val === '-' || val === decodeURI('%C3%97') || val === decodeURI('%C3%B7')) // %C3%97 is the multiplication sign encodedURI and %C3%B7 is the division sign encodedURI
-      operation(val)
-    ; else 
-      numberClick(val)
-    ;
+      if (operator === '=') 
+        oldOp = ''
+      ; else 
+        oldOp = operator
+      ;
+
+      titleBox.innerHTML = mem;
+    }
   };
 
   var numberClick = function numberClick(num) {
     if (!(titleBox.innerHTML.indexOf('.') > -1 && num === '.')) { // if the button clicked is the decimal point "." and the number in the display already has a decimal point, ignore
-      acButton.firstChild.innerHTML = 'C';
-      if (left !== 0) titleBox.innerHTML = '0';
+      if (flag) titleBox.innerHTML = '0';
       titleBox.innerHTML = titleBox.innerHTML === '0' && num !== '.' ? num : titleBox.innerHTML + num;
     }
   };
