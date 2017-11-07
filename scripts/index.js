@@ -3,7 +3,6 @@
 window.onload = function onload() {
   var butttons = document.getElementsByClassName('button');
   var titleBox = document.getElementsByClassName('titleBox')[0];
-  var clearButton = document.getElementsByClassName('clear')[0];
   var oldOp = '';
   var mem = 0;
   var flag = false;
