@@ -1,7 +1,7 @@
 'use strict';
 
 window.onload = function onload() {
-  var butttons = document.getElementsByClassName('button');
+  var buttons = document.getElementsByClassName('button');
   var titleBox = document.getElementsByClassName('titleBox')[0];
   var oldOp = '';
   var mem = 0;
@@ -38,7 +38,7 @@ window.onload = function onload() {
   var callback = function callback(e) {
     var val = e.target.innerHTML;
 
-    butttons.map(function (el) {
+    buttons.map(function (el) {
       removeClass(el, 'clicked');
     });
 
@@ -90,9 +90,9 @@ window.onload = function onload() {
   };
 
   // converts "buttons" to a proper JavaScript array, so that array methods are available for it
-  butttons = [].slice.call(butttons, 0);
+  buttons = [].slice.call(buttons, 0);
 
-  butttons.map(function (el) {
+  buttons.map(function (el) {
     addEvent(el, 'click', callback);
   });
 };

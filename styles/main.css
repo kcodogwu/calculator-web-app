@@ -82,7 +82,7 @@ body {
 	grid-row-end: 7;
 }
 
-/* class for unique grid properties of the clear button*/
+/* class for unique grid properties of the = button*/
 .eq {
 	grid-column-start: 3;
 	grid-column-end: 5;
@@ -90,7 +90,7 @@ body {
 	grid-row-end: 7;
 }
 
-/* class for unique grid properties of the clear button*/
+/* class for unique grid properties of the 0 button*/
 .zero {
 	grid-column-start: 1;
 	grid-column-end: 3;
